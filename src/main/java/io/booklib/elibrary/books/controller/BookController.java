@@ -13,7 +13,7 @@ public class BookController {
 
     @PostMapping
     public CreationBookResponse createBook(@RequestBody CreationBookRequest newBook){
-        System.out.println("The new book is: " + newBook.getTitle());
+        System.out.println("The new book is: " + newBook.title());
         UUID bookId = UUID.randomUUID();
         return new CreationBookResponse(bookId); // or we can remove the previous line: UUID bookId, and write it directly: return new CreationBookResponse(UUID.randomUUID());
 
