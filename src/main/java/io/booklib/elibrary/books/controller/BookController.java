@@ -15,10 +15,12 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    private final BookDtoMapper mapper = new BookDtoMapper();
+
     @PostMapping
     public BookResponse createBook(@RequestBody CreationBookRequest bookRequest){
         System.out.println("The new book is: " + bookRequest.title());
-       BookDTO respondedBookDTO = bookService.createBook(new BookDTO(null, bookRequest.title(), bookRequest.author(), bookRequest.genre(), bookRequest.isbn()));
-        return new BookResponse(respondedBookDTO.id(), respondedBookDTO.title(), respondedBookDTO.author(), respondedBookDTO.genre(), respondedBookDTO.isbn());
+        BookDTO bookDTO = bookService.createBook(mapper.map(bookRequest));
+        return mapper.map(bookDTO);
     }
 }
