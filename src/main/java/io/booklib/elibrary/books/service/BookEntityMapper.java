@@ -4,11 +4,11 @@ import io.booklib.elibrary.books.repository.BookEntity;
 
 public class BookEntityMapper {
 
-    public BookEntity map(BookDTO bookDTO){
+    public static BookEntity map(BookDTO bookDTO){
         return new BookEntity(bookDTO.id(), bookDTO.title(), bookDTO.author(), bookDTO.genre(), bookDTO.isbn());
     }
 
-    public BookDTO map(BookEntity bookEntity){
+    public static BookDTO map(BookEntity bookEntity){
         return new BookDTO(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getGenre(), bookEntity.getIsbn());
     }
 }

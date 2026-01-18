@@ -11,11 +11,9 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    private final BookEntityMapper mapper = new BookEntityMapper();
-
     public BookDTO createBook(BookDTO newBookDTO) {
-        BookEntity bookEntity = bookRepository.save(mapper.map(newBookDTO));
-        return mapper.map(bookEntity);
+        BookEntity bookEntity = bookRepository.save(BookEntityMapper.map(newBookDTO));
+        return BookEntityMapper.map(bookEntity);
     }
 
 }

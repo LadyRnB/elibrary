@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static io.booklib.elibrary.books.controller.BookDtoMapper.map; // Import a library of static method in order to use "map" without calling the class like(BookDtoMapper.map)
+
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -15,12 +17,10 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    private final BookDtoMapper mapper = new BookDtoMapper();
-
     @PostMapping
     public BookResponse createBook(@RequestBody CreationBookRequest bookRequest){
         System.out.println("The new book is: " + bookRequest.title());
-        BookDTO bookDTO = bookService.createBook(mapper.map(bookRequest));
-        return mapper.map(bookDTO);
+        BookDTO bookDTO = bookService.createBook(map(bookRequest));
+        return map(bookDTO);
     }
 }
