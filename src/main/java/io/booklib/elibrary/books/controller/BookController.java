@@ -3,13 +3,12 @@ package io.booklib.elibrary.books.controller;
 import io.booklib.elibrary.books.service.BookDTO;
 import io.booklib.elibrary.books.service.BookService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 import static io.booklib.elibrary.books.controller.BookDtoMapper.*;
@@ -27,13 +26,14 @@ public class BookController {
 
     @PostMapping
     public BookResponse createBook(@RequestBody CreationBookRequest bookRequest) {
-        log.info("Creating a new book {}", bookRequest);
-        BookDTO bookDTO = BookDtoMapper.mapRequestToDto(bookRequest);
-        return mapDtoToResponse(bookService.createBook(bookDTO));
+        log.info("Request received to create a new book: {}", bookRequest);
+        BookDTO bookDTO = bookService.createBook(BookDtoMapper.mapRequestToDto(bookRequest));
+        return mapDtoToResponse(bookDTO);
     }
 
     @GetMapping("{bookId}")
     public BookResponse getBookById(@PathVariable UUID bookId){
+        log.info("Request received to fetch a book with ID: {}", bookId);
         return bookService.findBookById(bookId)
                 .map(bookDto -> mapDtoToResponse(bookDto))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
@@ -48,16 +48,23 @@ public class BookController {
 //    }
 
     @GetMapping
-    public void getAllBooks() {}
+     public List<BookResponse> getAllBooks() {
+        log.info("Request to get all books is received");
+        return bookService.getAllBooks()
+                .stream()
+                .map(bookDTO -> mapDtoToResponse(bookDTO))
+                .toList();
+    }
 
     @DeleteMapping("{bookId}")
     public void deleteBookById(@PathVariable UUID bookId){
-        log.info("deleting the book {}", bookId);
+        log.info("Request received to delete a book with ID: {}", bookId);
         bookService.deleteBookById(bookId);
     }
 
     @PutMapping("{bookId}")
     public BookResponse updateBook(@PathVariable UUID bookId,@RequestBody CreationBookRequest bookRequest){
+        log.info("Request received to update a book with ID: {}", bookId);
         BookDTO bookDTO = mapRequestAndIdToDTO(bookRequest, bookId);
         return mapDtoToResponse(bookService.updateBook(bookDTO)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book does not exist")));
@@ -65,6 +72,7 @@ public class BookController {
 
     @PatchMapping("{bookId}")
     public BookResponse partiallyUpdate(@PathVariable UUID bookId, @RequestBody CreationBookRequest bookRequest){
+        log.info("Request received to update partially a book with ID: {}", bookId);
         return bookService.partiallyUpdate(mapRequestAndIdToDTO(bookRequest, bookId))
                 .map(bookDTO -> mapDtoToResponse(bookDTO))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book does not exist"));
