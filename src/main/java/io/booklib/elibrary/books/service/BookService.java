@@ -2,8 +2,8 @@ package io.booklib.elibrary.books.service;
 
 import io.booklib.elibrary.books.repository.BookEntity;
 import io.booklib.elibrary.books.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,10 +12,16 @@ import static io.booklib.elibrary.books.service.BookEntityMapper.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
+
+//   Whether we use the annotation @RequiredArgsConstructor to automatically create a constructor (injection)
+//   or:
+//   public BookService (BookRepository bookRepository) {
+//        this.bookRepository = bookRepository;
+//    }
 
     public BookDTO createBook(BookDTO newBookDTO) {
         BookEntity bookEntity = bookRepository.save(mapDtoToEntity(newBookDTO));
