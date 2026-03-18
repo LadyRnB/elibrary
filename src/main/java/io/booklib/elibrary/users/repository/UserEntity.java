@@ -1,5 +1,6 @@
 package io.booklib.elibrary.users.repository;
 
+import io.booklib.elibrary.users.service.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,9 +16,18 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue (strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private UserRole role;
 }

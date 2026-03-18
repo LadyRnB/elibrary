@@ -14,10 +14,10 @@ public class UserEntityMapper {
     }
 
     public UserEntity mapToEntity(UserDTO userDTO){
-        return new UserEntity(userDTO.userId(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email());
+        return new UserEntity(userDTO.userId(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.role());
     }
 
     public UserDTO mapToDTO(UserEntity userEntity){
-        return new UserDTO(userEntity.getId(), userEntity.getUsername(), null, userEntity.getEmail());
+        return new UserDTO(userEntity.getId(), userEntity.getUsername(), null, userEntity.getEmail(), userEntity.getRole());
     }
 }

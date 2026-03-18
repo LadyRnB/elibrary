@@ -1,5 +1,6 @@
 package io.booklib.elibrary.users.controller;
 
+import io.booklib.elibrary.users.service.UserRole;
 import jakarta.validation.constraints.*;
 
 public record UserRegistrationRequest(
@@ -15,5 +16,8 @@ public record UserRegistrationRequest(
                 regexp = "^[a-z][a-z0-9._+-]{1,30}@[a-z]{3,10}\\.[a-z]{2,5}",
                 message = " Invalid Email format"
         )
-        String email
+        String email,
+
+        @NotNull
+        UserRole role
 ){}
