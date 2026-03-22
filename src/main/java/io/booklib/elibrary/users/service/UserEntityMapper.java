@@ -18,6 +18,6 @@ public class UserEntityMapper {
     }
 
     public UserDTO mapToDTO(UserEntity userEntity){
-        return new UserDTO(userEntity.getId(), userEntity.getUsername(), null, userEntity.getEmail(), userEntity.getRole());
+        return new UserDTO(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getRole());
     }
 }
