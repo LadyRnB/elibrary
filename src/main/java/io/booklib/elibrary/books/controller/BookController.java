@@ -3,9 +3,9 @@ package io.booklib.elibrary.books.controller;
 import io.booklib.elibrary.books.service.BookDTO;
 import io.booklib.elibrary.books.service.BookService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,6 +30,7 @@ public class BookController {
 //    or an annotation: @RequiredArgsConstructor would suffice
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN_ROLE', 'AUTHOR_ROLE')")
     public BookResponse createBook(@RequestBody @Valid CreationBookRequest bookRequest) {
         log.info("Request received to create a new book: {}", bookRequest);
         BookDTO bookDTO = bookService.createBook(BookDtoMapper.mapRequestToDto(bookRequest));
@@ -62,12 +63,14 @@ public class BookController {
     }
 
     @DeleteMapping("{bookId}")
+    @PreAuthorize("hasAnyRole('ADMIN_ROLE','AUTHOR_ROLE')")
     public void deleteBookById(@PathVariable UUID bookId){
         log.info("Request received to delete a book with ID: {}", bookId);
         bookService.deleteBookById(bookId);
     }
 
     @PutMapping("{bookId}")
+    @PreAuthorize("hasAnyRole('ADMIN_ROLE','AUTHOR_ROLE')")
     public BookResponse updateBook(@PathVariable UUID bookId,@RequestBody CreationBookRequest bookRequest){
         log.info("Request received to update a book with ID: {}", bookId);
         BookDTO bookDTO = mapRequestAndIdToDTO(bookRequest, bookId);
@@ -76,6 +79,7 @@ public class BookController {
     }
 
     @PatchMapping("{bookId}")
+    @PreAuthorize("hasAnyRole('ADMIN_ROLE', 'AUTHOR_ROLE')")
     public BookResponse partiallyUpdate(@PathVariable UUID bookId, @RequestBody CreationBookRequest bookRequest){
         log.info("Request received to update partially a book with ID: {}", bookId);
         return bookService.partiallyUpdate(mapRequestAndIdToDTO(bookRequest, bookId))
