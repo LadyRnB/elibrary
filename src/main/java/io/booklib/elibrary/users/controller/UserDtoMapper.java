@@ -1,7 +1,6 @@
 package io.booklib.elibrary.users.controller;
 
 import io.booklib.elibrary.users.service.UserDTO;
-import io.booklib.elibrary.users.service.UserRole;
 
 public class UserDtoMapper {
 
