@@ -1,10 +1,8 @@
 package io.booklib.elibrary.books.repository;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.util.UUID;
 
@@ -16,11 +14,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BookEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue (strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
+
+    @Column(nullable = false)
     private String genre;
+
+    @Column(nullable = false, unique = true)
     private String isbn;
 
 }

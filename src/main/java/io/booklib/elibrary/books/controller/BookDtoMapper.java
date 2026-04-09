@@ -7,10 +7,16 @@ import java.util.UUID;
 public class BookDtoMapper {
 
     public static BookDTO mapRequestToDto(CreationBookRequest bookRequest){
+        if(bookRequest == null){
+            return new BookDTO(null, null, null, null, null);
+        }
         return new BookDTO(null, bookRequest.title(), bookRequest.author(), bookRequest.genre(), bookRequest.isbn());
     }
 
     public static BookResponse mapDtoToResponse(BookDTO bookDTO){
+        if(bookDTO == null){
+            return new BookResponse(null, null, null, null, null);
+        }
         return new BookResponse(bookDTO.id(), bookDTO.title(), bookDTO.author(), bookDTO.genre(), bookDTO.isbn());
     }
     //A mapper to transform a request into a DTO with ID, to be used in @PutMapping

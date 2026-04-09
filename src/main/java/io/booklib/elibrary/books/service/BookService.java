@@ -24,6 +24,9 @@ public class BookService {
 //    }
 
     public BookDTO createBook(BookDTO newBookDTO) {
+        if (newBookDTO == null) {
+            return null;
+        }
         BookEntity bookEntity = bookRepository.save(mapDtoToEntity(newBookDTO));
         log.debug("A new book {} is created", bookEntity);
         return mapEntityToDto(bookEntity);
