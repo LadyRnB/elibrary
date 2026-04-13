@@ -30,7 +30,7 @@ public class BookController {
 //    or an annotation: @RequiredArgsConstructor would suffice
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN_ROLE', 'AUTHOR_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUTHOR')")
     public BookResponse createBook(@RequestBody @Valid CreationBookRequest bookRequest) {
         log.info("Request received to create a new book: {}", bookRequest);
         BookDTO bookDTO = bookService.createBook(BookDtoMapper.mapRequestToDto(bookRequest));
