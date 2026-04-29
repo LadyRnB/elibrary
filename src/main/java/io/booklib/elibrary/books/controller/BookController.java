@@ -63,14 +63,14 @@ public class BookController {
     }
 
     @DeleteMapping("{bookId}")
-    @PreAuthorize("hasAnyRole('ADMIN_ROLE','AUTHOR_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN','AUTHOR')")
     public void deleteBookById(@PathVariable UUID bookId){
         log.info("Request received to delete a book with ID: {}", bookId);
         bookService.deleteBookById(bookId);
     }
 
     @PutMapping("{bookId}")
-    @PreAuthorize("hasAnyRole('ADMIN_ROLE','AUTHOR_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN','AUTHOR')")
     public BookResponse updateBook(@PathVariable UUID bookId,@RequestBody CreationBookRequest bookRequest){
         log.info("Request received to update a book with ID: {}", bookId);
         BookDTO bookDTO = mapRequestAndIdToDTO(bookRequest, bookId);
@@ -79,13 +79,12 @@ public class BookController {
     }
 
     @PatchMapping("{bookId}")
-    @PreAuthorize("hasAnyRole('ADMIN_ROLE', 'AUTHOR_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUTHOR')")
     public BookResponse partiallyUpdate(@PathVariable UUID bookId, @RequestBody CreationBookRequest bookRequest){
         log.info("Request received to update partially a book with ID: {}", bookId);
         return bookService.partiallyUpdate(mapRequestAndIdToDTO(bookRequest, bookId))
                 .map(bookDTO -> mapDtoToResponse(bookDTO))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book does not exist"));
     }
-
 
 }
