@@ -1,4 +1,4 @@
-package io.booklib.elibrary.configuration;
+package io.booklib.elibrary.common.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
