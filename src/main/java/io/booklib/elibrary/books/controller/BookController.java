@@ -2,9 +2,11 @@ package io.booklib.elibrary.books.controller;
 
 import io.booklib.elibrary.books.service.BookDTO;
 import io.booklib.elibrary.books.service.BookService;
+import io.booklib.elibrary.common.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -40,9 +42,8 @@ public class BookController {
     @GetMapping("{bookId}")
     public BookResponse getBookById(@PathVariable UUID bookId){
         log.info("Request received to fetch a book with ID: {}", bookId);
-        return bookService.findBookById(bookId)
-                .map(bookDto -> mapDtoToResponse(bookDto))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+        BookDTO bookDto = bookService.findBookById(bookId);
+        return mapDtoToResponse(bookDto);
     }
 //    or other way:
 //    @GetMapping("{bookId}")
@@ -85,6 +86,11 @@ public class BookController {
         return bookService.partiallyUpdate(mapRequestAndIdToDTO(bookRequest, bookId))
                 .map(bookDTO -> mapDtoToResponse(bookDTO))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book does not exist"));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFound(NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
 }

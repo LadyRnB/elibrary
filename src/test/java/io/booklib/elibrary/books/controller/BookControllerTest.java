@@ -2,7 +2,8 @@ package io.booklib.elibrary.books.controller;
 
 import io.booklib.elibrary.books.service.BookDTO;
 import io.booklib.elibrary.books.service.BookService;
-import io.booklib.elibrary.configuration.SecurityConfig;
+import io.booklib.elibrary.common.configuration.SecurityConfig;
+import io.booklib.elibrary.common.exceptions.NotFoundException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,7 +159,7 @@ public class BookControllerTest {
                             "isbn": "O123456789012"}
                     """.formatted(bookId);
 
-            when(bookService.findBookById(any())).thenReturn(Optional.of(new BookDTO(bookId, "Titanic", "Spielberg", "Fantasy", "O123456789012")));
+            when(bookService.findBookById(any())).thenReturn(new BookDTO(bookId, "Titanic", "Spielberg", "Fantasy", "O123456789012"));
 
             mockMvc.perform(get("/books/{bookId}", bookId))
                     .andExpect(status().isOk())
@@ -170,9 +171,10 @@ public class BookControllerTest {
         @WithMockUser(roles = "READER")
         public void testGetBookByIdWithNotFoundBook() throws Exception {
             UUID bookId = UUID.randomUUID();
-            when(bookService.findBookById(any())).thenReturn(Optional.empty());
+            when(bookService.findBookById(any())).thenThrow(new NotFoundException("Book does not exist"));
             mockMvc.perform(get("/books/{bookId}", bookId))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string("Book does not exist"));
         }
 
         @Test

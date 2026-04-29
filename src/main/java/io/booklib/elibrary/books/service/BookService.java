@@ -2,6 +2,7 @@ package io.booklib.elibrary.books.service;
 
 import io.booklib.elibrary.books.repository.BookEntity;
 import io.booklib.elibrary.books.repository.BookRepository;
+import io.booklib.elibrary.common.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,10 @@ public class BookService {
         return mapEntityToDto(bookEntity);
     }
 
-    public Optional<BookDTO> findBookById(UUID bookId) {
+    public BookDTO findBookById(UUID bookId) {
         return bookRepository.findById(bookId)
-                .map(bookEntity -> mapEntityToDto(bookEntity));
+                .map(bookEntity -> mapEntityToDto(bookEntity))
+                .orElseThrow(() -> new NotFoundException("Book does not exist"));
     }
 
     public List<BookDTO> getAllBooks(){
